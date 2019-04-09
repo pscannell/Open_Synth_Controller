@@ -25,9 +25,9 @@ extern "C" {
 __IO uint16_t RegularConvData_Tab[9];
 
 // keys and knobs
-uint8_t keyValuesRaw[26];
-uint8_t keyValues[4][26];
-uint8_t keyValuesLast[26];
+uint8_t keyValuesRaw[28];
+uint8_t keyValues[4][28];
+uint8_t keyValuesLast[28];
 uint32_t knobValues[6];
 
 // key mux
@@ -238,7 +238,7 @@ void hardwareInit(void){
 	// key lines
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2
-			| GPIO_Pin_3;
+			| GPIO_Pin_3 | GPIO_Pin_9 | GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; // Changed to pull-up for buttons connected to GND (PS)
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
@@ -538,6 +538,8 @@ uint32_t scanKeys() {
 	if (seqCount == 2) {
 		/* Changed Aux key pin (PS) */
 		keyValuesRaw[0] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_3)) ? 0 : 100; // the aux key
+		keyValuesRaw[26] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9)) ? 0 : 100; // oct up
+		keyValuesRaw[27] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_10)) ? 0 : 100; // oct down
 		keyValuesRaw[1 + muxSelCount] =
 				(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_2)) ? 0 : 100; //RegularConvData_Tab[3];
 		keyValuesRaw[9 + muxSelCount] =
@@ -557,6 +559,8 @@ void remapKeys() {
 	// Key values all updated for PCB (PS)
 	keyValues[cycleCount][0] = keyValuesRaw[0];
 	keyValues[cycleCount][25] = keyValuesRaw[25];
+	keyValues[cycleCount][26] = keyValuesRaw[26];
+	keyValues[cycleCount][27] = keyValuesRaw[27];
 
 	keyValues[cycleCount][1] = keyValuesRaw[18];
 	keyValues[cycleCount][2] = keyValuesRaw[19];
@@ -595,7 +599,7 @@ void checkForKeyEvent() {
 	remapKeys();
 	uint32_t i;
 
-	for (i = 0; i < 26; i++) {
+	for (i = 0; i < 28; i++) {
 		if ((keyValues[0][i]) && (keyValues[1][i]) && (keyValues[2][i])
 				&& (keyValues[3][i])) {
 
