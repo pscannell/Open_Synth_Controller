@@ -3,6 +3,8 @@
 bin/
 Debug/
 tmp/
+*.o
+*.mk
 *.tmp
 *.bak
 *.swp
