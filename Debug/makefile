@@ -49,38 +49,38 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-Mother_STM32F0.hex \
+Open_synth_STM32F0.hex \
 
 SECONDARY_SIZE += \
-Mother_STM32F0.siz \
+Open_synth_STM32F0.siz \
 
 
 # All Target
-all: Mother_STM32F0.elf secondary-outputs
+all: Open_synth_STM32F0.elf secondary-outputs
 
 # Tool invocations
-Mother_STM32F0.elf: $(OBJS) $(USER_OBJS)
+Open_synth_STM32F0.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Mother_STM32F0.map" --specs=nano.specs -o "Mother_STM32F0.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Open_synth_STM32F0.map" --specs=nano.specs -o "Open_synth_STM32F0.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Mother_STM32F0.hex: Mother_STM32F0.elf
+Open_synth_STM32F0.hex: Open_synth_STM32F0.elf
 	@echo 'Invoking: Cross ARM GNU Create Flash Image'
-	arm-none-eabi-objcopy -O ihex "Mother_STM32F0.elf"  "Mother_STM32F0.hex"
+	arm-none-eabi-objcopy -O ihex "Open_synth_STM32F0.elf"  "Open_synth_STM32F0.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Mother_STM32F0.siz: Mother_STM32F0.elf
+Open_synth_STM32F0.siz: Open_synth_STM32F0.elf
 	@echo 'Invoking: Cross ARM GNU Print Size'
-	arm-none-eabi-size --format=berkeley "Mother_STM32F0.elf"
+	arm-none-eabi-size --format=berkeley "Open_synth_STM32F0.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS)$(CPP_DEPS) Mother_STM32F0.elf
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS)$(CPP_DEPS) Open_synth_STM32F0.elf
 	-@echo ' '
 
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_SIZE)

@@ -1,9 +1,12 @@
 
 .metadata
 bin/
-Debug/
 tmp/
 *.o
+*.d
+*.hex
+*.map
+*.elf
 *.mk
 *.tmp
 *.bak
