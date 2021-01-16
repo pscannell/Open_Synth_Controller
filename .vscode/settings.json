@@ -1,0 +1,6 @@
+{
+    "stm32-for-vscode.openOCDPath": "openocd",
+    "stm32-for-vscode.makePath": "make",
+    "stm32-for-vscode.armToolchainPath": "/Users/pscan/opt/gcc-arm-none-eabi-10-2020-q4-major/bin",
+    "cortex-debug.armToolchainPath": "/Users/pscan/opt/gcc-arm-none-eabi-10-2020-q4-major/bin"
+}
