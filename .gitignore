@@ -7,7 +7,7 @@ tmp/
 *.hex
 *.map
 *.elf
-*.mk
+# *.mk
 *.tmp
 *.bak
 *.swp
@@ -57,4 +57,4 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
-/Release/
+# /Release/

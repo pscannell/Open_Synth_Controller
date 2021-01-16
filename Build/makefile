@@ -56,23 +56,31 @@ Open_synth_STM32F0.siz \
 
 
 # All Target
-all: Open_synth_STM32F0.elf secondary-outputs
+all: debug release secondary-outputs
 
 # Tool invocations
-Open_synth_STM32F0.elf: $(OBJS) $(USER_OBJS)
+debug: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Open_synth_STM32F0.map" --specs=nano.specs -o "Open_synth_STM32F0.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m0 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra  -g3 -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Open_synth_STM32F0.map" --specs=nano.specs -o "Open_synth_STM32F0_debug.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Open_synth_STM32F0.hex: Open_synth_STM32F0.elf
+# Tool invocations
+release: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: Cross ARM C++ Linker'
+	arm-none-eabi-g++ -mcpu=cortex-m0 -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra  -g -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Open_synth_STM32F0.map" --specs=nano.specs -o "Open_synth_STM32F0_release.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+hex: debug
 	@echo 'Invoking: Cross ARM GNU Create Flash Image'
 	arm-none-eabi-objcopy -O ihex "Open_synth_STM32F0.elf"  "Open_synth_STM32F0.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Open_synth_STM32F0.siz: Open_synth_STM32F0.elf
+siz: debug
 	@echo 'Invoking: Cross ARM GNU Print Size'
 	arm-none-eabi-size --format=berkeley "Open_synth_STM32F0.elf"
 	@echo 'Finished building: $@'
