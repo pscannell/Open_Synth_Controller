@@ -31,6 +31,20 @@
             "configFiles": [
                 "openocd.cfg"
             ]
+        },
+        {
+            "showDevDebugOutput": "parsed",
+            "cwd": "${workspaceRoot}",
+            "executable": "./build/.elf",
+            "name": "Attach STM32",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "preLaunchTask": "Build STM",
+            "device": "",
+            "configFiles": [
+                "openocd.cfg"
+            ]
         }
     ]
 }

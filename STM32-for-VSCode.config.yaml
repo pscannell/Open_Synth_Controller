@@ -6,22 +6,22 @@
 # - entry_2
 
 # The project name
-target: 
+target: stm_build
 # Can be C or C++
 language: C++
 
 optimization: Og
 
 # MCU settings
-targetMCU: 
-cpu: 
+targetMCU: STM32F051R8Tx
+cpu: cortex-m0
 fpu: 
 floatAbi: 
-ldscript:  # linker script
+ldscript: ldscripts/test.ld
 
 # Compiler definitions. The -D prefix for the compiler will be automatically added.
-cDefinitions: []
-cxxDefinitions: []
+cDefinitions: [DEBUG,USE_FULL_ASSERT, STM32F051, HSE_VALUE=8000000]
+cxxDefinitions: [DEBUG,USE_FULL_ASSERT, STM32F051, HSE_VALUE=8000000]
 asDefinitions: []
 
 # Compiler definition files. you can add a single files or an array of files for different definitions.
@@ -49,23 +49,33 @@ libraryDirectories: []
 # Do mind that double stars are reserved in yaml
 # these should be escaped with a: \ or the name should be in double quotes e.g. "**.test.**"
 excludes: 
-  - "**/Examples/**"
-  - "**/examples/**"
-  - "**/Example/**"
-  - "**/example/**"
-  - "**_template.*"
+  - system/src/newlib/_startup.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_can.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_cec.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_comp.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_crc.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_crs.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_dac.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_dbgmcu.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_exti.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_flash.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_i2c.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_iwdg.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_pwr.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_rtc.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_syscfg.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_tim.c
+  - system/src/stm32f0-stdperiph/stm32f0xx_wwdg.c
 
 
 # Include directories (directories containing .h or .hpp files)
 # If a CubeMX makefile is present it will automatically include the include directories from that makefile.
 includeDirectories: 
-  - Inc/**
-  - Core/Inc/**
-  - Core/Lib/**
-  - Src/**
-  - Core/Src/**
-  - Core/Lib/**
-
+  - src 
+  - include 
+  - system/include 
+  - system/include/cmsis 
+  - system/include/stm32f0-stdperiph
 
 # Files that should be included in the compilation.
 # If a CubeMX makefile is present it will automatically include the  c and cpp/cxx files from that makefile.
@@ -73,10 +83,13 @@ includeDirectories:
 # Do mind that double stars are reserved in yaml
 # these should be escaped with a: \ or the name should be in double quotes e.g. "HARDWARE_DRIVER*.c"
 sourceFiles:  
-  - Src/**
-  - Core/Src/**
-  - Core/Lib/**
-
+  - src/**
+  - src/OSC/**
+  - system/src/stm32f0-stdperiph/**
+  - system/src/newlib/**
+  - system/src/diag/**
+  - system/src/cortexm/**
+  - system/src/cmsis/**
 
 # When no makefile is present it will show a warning pop-up.
 # However when compilation without the CubeMX Makefile is desired, this can be turned of.

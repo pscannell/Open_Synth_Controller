@@ -18,6 +18,9 @@ local.properties
 .loadpath
 .recommenders
 
+# VS Code STM32 makefile
+STM32Make.make
+
 # External tool builders
 .externalToolBuilders/
 
