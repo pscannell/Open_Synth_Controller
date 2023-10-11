@@ -7,6 +7,11 @@
     "files.associations": {
         "stm32f0xx.h": "c",
         "exceptionhandlers.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "core_cmfunc.h": "c",
+        "core_cminstr.h": "c",
+        "stdint.h": "c",
+        "cstdint": "c",
+        "stdint-gcc.h": "c"
     }
 }

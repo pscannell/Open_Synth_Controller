@@ -6,7 +6,7 @@
 # - entry_2
 
 # The project name
-target: open_synth
+target: synth
 # Can be C or C++
 language: C++
 
