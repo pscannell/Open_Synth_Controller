@@ -25,9 +25,9 @@ extern "C" {
 __IO uint16_t RegularConvData_Tab[9];
 
 // keys and knobs
-uint8_t keyValuesRaw[28];
-uint8_t keyValues[4][28];
-uint8_t keyValuesLast[28];
+uint8_t keyValuesRaw[26];
+uint8_t keyValues[4][26];
+uint8_t keyValuesLast[26];
 uint32_t knobValues[6];
 
 // key mux
@@ -117,11 +117,11 @@ int main(int argc, char* argv[]) {
 	// oled init
 	ssd1306_init(0);
 
-	// Print Intro  Header
-	println_8_spacy(" Open Pd Synth ", 15, 4, 4);
+	println_8_spacy("   ORGANELLE", 12, 6, 4);
 
-	println_8("open_synth.local", 16, 8, 28);
-	println_8("for storage", 11, 8, 38);
+	//println_8("for more patches visit", 22, 0, 22);
+	println_8("www.organelle.io", 16, 8, 28);
+//	println_8("for patches", 11, 8, 42);
 
 	char progressStr[20];
 	int len = 0;
@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
 				msgIn.empty(); // free space occupied by message
 			}
 		}
-		if (stopwatchReport() > 1800) { // Increased boot time for Pi (PS)
+		if (stopwatchReport() > 1500) {
 			stopwatchStart();
 			len = sprintf(progressStr, "starting: %d %%", progress);
 			if (progress < 99)
@@ -238,9 +238,9 @@ void hardwareInit(void){
 	// key lines
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2
-			| GPIO_Pin_3 | GPIO_Pin_9 | GPIO_Pin_10;
+			| GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; // Changed to pull-up for buttons connected to GND (PS)
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	// foot switch
@@ -468,7 +468,7 @@ void shutdown(OSCMessage &msg) {
 
 	stopwatchStart();
 	while (progress < 99) {
-		if (stopwatchReport() > 1200) {	// Increased time for shutdown on Pi
+		if (stopwatchReport() > 500) {
 			stopwatchStart();
 			len = sprintf(progressStr, "Shutting down: %d %%", progress++);
 			println_8(progressStr, len, 1, 21);
@@ -536,17 +536,14 @@ uint32_t scanKeys() {
 		// do nothing, wait for next conversion sequence since the muxes were just changed
 	}
 	if (seqCount == 2) {
-		/* Changed Aux key pin (PS) */
 		keyValuesRaw[0] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_3)) ? 0 : 100; // the aux key
-		keyValuesRaw[26] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9)) ? 0 : 100; // oct up
-		keyValuesRaw[27] = (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_10)) ? 0 : 100; // oct down
 		keyValuesRaw[1 + muxSelCount] =
 				(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_2)) ? 0 : 100; //RegularConvData_Tab[3];
 		keyValuesRaw[9 + muxSelCount] =
 				(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_1)) ? 0 : 100; //RegularConvData_Tab[4];
 		keyValuesRaw[17 + muxSelCount] =
 				(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_0)) ? 0 : 100; //RegularConvData_Tab[5];
-		keyValuesRaw[25] = 0;//(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1)) ? 0 : 100; // the foot switch can be implemented later
+		keyValuesRaw[25] = 0;//(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_1)) ? 0 : 100; // the foot switch
 	}
 	seqCount++;
 	seqCount %= 3;
@@ -556,38 +553,35 @@ uint32_t scanKeys() {
 void remapKeys() {
 	static uint32_t cycleCount = 0;
 
-	// Key values all updated for PCB (PS)
 	keyValues[cycleCount][0] = keyValuesRaw[0];
 	keyValues[cycleCount][25] = keyValuesRaw[25];
-	keyValues[cycleCount][26] = keyValuesRaw[26];
-	keyValues[cycleCount][27] = keyValuesRaw[27];
 
-	keyValues[cycleCount][1] = keyValuesRaw[18];
-	keyValues[cycleCount][2] = keyValuesRaw[19];
-	keyValues[cycleCount][3] = keyValuesRaw[20];
-	keyValues[cycleCount][4] = keyValuesRaw[21];
-	keyValues[cycleCount][5] = keyValuesRaw[22];
-	keyValues[cycleCount][6] = keyValuesRaw[23];
-	keyValues[cycleCount][7] = keyValuesRaw[24];
-	keyValues[cycleCount][8] = keyValuesRaw[17];
+	keyValues[cycleCount][1] = keyValuesRaw[23];
+	keyValues[cycleCount][2] = keyValuesRaw[21];
+	keyValues[cycleCount][3] = keyValuesRaw[17];
+	keyValues[cycleCount][4] = keyValuesRaw[18];
+	keyValues[cycleCount][5] = keyValuesRaw[24];
+	keyValues[cycleCount][6] = keyValuesRaw[22];
+	keyValues[cycleCount][7] = keyValuesRaw[19];
+	keyValues[cycleCount][8] = keyValuesRaw[20];
 
-	keyValues[cycleCount][9] = keyValuesRaw[10];
-	keyValues[cycleCount][10] = keyValuesRaw[11];
-	keyValues[cycleCount][11] = keyValuesRaw[12];
-	keyValues[cycleCount][12] = keyValuesRaw[13];
-	keyValues[cycleCount][13] = keyValuesRaw[14];
-	keyValues[cycleCount][14] = keyValuesRaw[15];
-	keyValues[cycleCount][15] = keyValuesRaw[16];
-	keyValues[cycleCount][16] = keyValuesRaw[9];
+	keyValues[cycleCount][9] = keyValuesRaw[13];
+	keyValues[cycleCount][10] = keyValuesRaw[15];
+	keyValues[cycleCount][11] = keyValuesRaw[10];
+	keyValues[cycleCount][12] = keyValuesRaw[9];
+	keyValues[cycleCount][13] = keyValuesRaw[16];
+	keyValues[cycleCount][14] = keyValuesRaw[11];
+	keyValues[cycleCount][15] = keyValuesRaw[14];
+	keyValues[cycleCount][16] = keyValuesRaw[12];
 
-	keyValues[cycleCount][17] = keyValuesRaw[2];
-	keyValues[cycleCount][18] = keyValuesRaw[3];
-	keyValues[cycleCount][19] = keyValuesRaw[4];
-	keyValues[cycleCount][20] = keyValuesRaw[5];
-	keyValues[cycleCount][21] = keyValuesRaw[6];
-	keyValues[cycleCount][22] = keyValuesRaw[7];
-	keyValues[cycleCount][23] = keyValuesRaw[8];
-	keyValues[cycleCount][24] = keyValuesRaw[1];
+	keyValues[cycleCount][17] = keyValuesRaw[5];
+	keyValues[cycleCount][18] = keyValuesRaw[7];
+	keyValues[cycleCount][19] = keyValuesRaw[2];
+	keyValues[cycleCount][20] = keyValuesRaw[1];
+	keyValues[cycleCount][21] = keyValuesRaw[4];
+	keyValues[cycleCount][22] = keyValuesRaw[8];
+	keyValues[cycleCount][23] = keyValuesRaw[3];
+	keyValues[cycleCount][24] = keyValuesRaw[6];
 
 	cycleCount++;
 	cycleCount &= 0x3;  // i between 0-3
@@ -599,7 +593,7 @@ void checkForKeyEvent() {
 	remapKeys();
 	uint32_t i;
 
-	for (i = 0; i < 28; i++) {
+	for (i = 0; i < 26; i++) {
 		if ((keyValues[0][i]) && (keyValues[1][i]) && (keyValues[2][i])
 				&& (keyValues[3][i])) {
 
