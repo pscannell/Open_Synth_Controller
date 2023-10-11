@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "name": "STM32",
+      "includePath": [
+        "include",
+        "src",
+        "system/include",
+        "system/include/cmsis",
+        "system/include/stm32f0-stdperiph"
+      ],
+      "defines": [
+        "DEBUG",
+        "HSE_VALUE=8000000",
+        "STM32F051",
+        "USE_FULL_ASSERT",
+        "USE_STDPERIPH_DRIVER"
+      ],
+      "compilerPath": "/Users/pscan/opt/gcc-arm-none-eabi-10-2020-q4-major/bin/arm-none-eabi-g++"
+    }
+  ],
+  "version": 4
+}

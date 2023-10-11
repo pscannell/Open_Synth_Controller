@@ -1,8 +1,15 @@
 
 .metadata
 bin/
-Debug/
 tmp/
+*.o
+*.d
+*.bin
+*.hex
+*.map
+*.elf
+*.lst
+*.mk
 *.tmp
 *.bak
 *.swp
@@ -11,6 +18,9 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+# VS Code STM32 makefile
+STM32Make.make
 
 # External tool builders
 .externalToolBuilders/
@@ -52,4 +62,4 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
-/Release/
+# /Release/
