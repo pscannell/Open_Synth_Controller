@@ -4,11 +4,12 @@ bin/
 tmp/
 *.o
 *.d
+*.bin
 *.hex
 *.map
 *.elf
 *.lst
-# *.mk
+*.mk
 *.tmp
 *.bak
 *.swp

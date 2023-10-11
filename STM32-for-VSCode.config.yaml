@@ -6,7 +6,7 @@
 # - entry_2
 
 # The project name
-target: stm_build
+target: open_synth
 # Can be C or C++
 language: C++
 
@@ -17,7 +17,7 @@ targetMCU: STM32F051R8Tx
 cpu: cortex-m0
 fpu: 
 floatAbi: 
-ldscript: ldscripts/test.ld
+ldscript: ldscripts/open_synth.ld
 
 # Compiler definitions. The -D prefix for the compiler will be automatically added.
 cDefinitions: [DEBUG,USE_FULL_ASSERT, STM32F051, HSE_VALUE=8000000]

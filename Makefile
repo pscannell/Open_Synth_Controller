@@ -34,26 +34,6 @@ BUILD_DIR = build
 ######################################
 # source
 ######################################
-# C_SOURCES := $(wildcard \
-# 	src/*.c|\
-# 	system/src/*.c)
-# C_SOURCES := $(filter-out \
-# 	src/stm32f0-stdperiph/stm32f0xx_can.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_cec.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_comp.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_crc.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_crs.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_dac.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_dbgmcu.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_exti.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_flash.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_i2c.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_iwdg.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_pwr.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_rtc.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_syscfg.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_tim.c|\
-# 	src/stm32f0-stdperiph/stm32f0xx_wwdg.c, $(C_SOURCES))
 
 # C sources
 C_SOURCES =  \
@@ -78,8 +58,7 @@ system/src/newlib/_exit.c \
 system/src/newlib/_sbrk.c \
 system/src/newlib/_syscalls.c \
 system/src/newlib/_write.c \
-system/src/newlib/assert.c 
-# system/src/newlib/_startup.c \
+system/src/newlib/assert.c
 
 C_SOURCES += \
 system/src/diag/Trace.c \
@@ -200,14 +179,12 @@ CXXFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT_MEM = ldscripts/mem.ld
-LDSCRIPT_LIBS = ldscripts/libs.ld
-LDSCRIPT_SECTIONS =ldscripts/sections.ld
+LDSCRIPT = ldscripts/open_synth.ld
 
 # libraries
 LIBS = -lc -lm -lnosys 
 LIBDIR = 
-LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT_MEM) -T$(LDSCRIPT_LIBS) -T$(LDSCRIPT_SECTIONS) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
