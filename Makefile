@@ -57,6 +57,7 @@ C_SOURCES += \
 system/src/newlib/_exit.c \
 system/src/newlib/_sbrk.c \
 system/src/newlib/_syscalls.c \
+system/src/newlib/_startup.c \
 system/src/newlib/_write.c \
 system/src/newlib/assert.c
 
@@ -153,10 +154,10 @@ CXX_INCLUDES = \
 -Isystem/include/stm32f0-stdperiph
 
 
-# compile gcc flags
+# compile gcc flags 
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -165,7 +166,7 @@ endif
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 
-CXXFLAGS = $(MCU) $(C_DEFS) $(CXX_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CXXFLAGS = $(MCU) $(C_DEFS) $(CXX_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -fabi-version=0 -fno-exceptions -fno-rtti -fno-use-cxa-atexit -fno-threadsafe-statics
 
 ifeq ($(DEBUG), 1)
 CXXFLAGS += -g -gdwarf-2
@@ -179,12 +180,12 @@ CXXFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = ldscripts/open_synth.ld
+LDSCRIPT = open_synth.ld
 
 # libraries
 LIBS = -lc -lm -lnosys 
-LIBDIR = 
-LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LIBDIR = ./ldscripts
+LDFLAGS = $(MCU) -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall -Wextra -g3 -T$(LDSCRIPT) -L$(LIBDIR) $(LIBS) -nostartfiles -Xlinker --gc-sections -Wl,-Map=$(BUILD_DIR)/$(TARGET).map --specs=nano.specs
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
